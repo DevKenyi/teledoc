@@ -1,0 +1,8 @@
+<div className="m-8 p-8  ">
+      <div className="font-bold m-4 text-4xl   text-black">
+        Pending <span className="text-red-600">Appoinments</span>
+      </div>
+      <div className="flex lg:flex-row sm:flex-col md: flex-grow  cursor-pointer border ">
+        COMING SOON...
+      </div>
+    </div>

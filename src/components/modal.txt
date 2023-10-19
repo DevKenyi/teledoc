@@ -1,0 +1,276 @@
+import React, { useState } from "react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { HttpStatusCode } from "axios";
+import ApiService from "./service/ApiService";
+import { AlertWithContent, SuccessMessage } from "./SuccessMessage";
+
+export default function DoctorModal({ disabled, doctorId }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [appointmentTime, setAppointmentTime] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [loading, setIsLoading] = useState(false);
+  const jwtToken = localStorage.getItem("jwtToken");
+  const [successfulMessage, setSuccessfulMessage] = useState(false);
+
+  const handleBookAppointment = async (doctorId) => {
+    console.log(
+      "Appointment booked:",
+      appointmentDate,
+      appointmentTime,
+      purpose
+    );
+
+    console.log("doctor id is " + doctorId);
+    try {
+      setIsLoading(true);
+
+      const appointmentDateTimeString = `${appointmentDate}T${appointmentTime}`;
+      const appointmentDateTime = new Date(appointmentDateTimeString);
+      const formattedDateTime = appointmentDateTime.toISOString();
+
+      const data = {
+        appointmentDateTime: formattedDateTime, // Use the formatted date and time
+        purpose,
+      };
+
+      const response = await ApiService.bookAppointmentPost(doctorId, data, {
+        Authorization: `Bearer ${jwtToken}`,
+      });
+
+      console.log("here is the users jwt " + jwtToken);
+      // Process the response here
+      if (response.status === HttpStatusCode.Created) {
+        console.log("Appointment is booked successfully");
+      } else {
+        console.log("Failed to book appointment" + response.status);
+      }
+    } catch (error) {
+      console.log("Error booking appointment", error);
+      setIsLoading(false);
+    }
+
+    setOpenModal(false);
+    setSuccessfulMessage(true);
+  };
+
+  return (
+    <>
+      <Button disabled={disabled} onClick={() => setOpenModal(true)}>
+        Book Appointment
+      </Button>
+      <Modal
+        show={openModal}
+        size="md"
+        popup
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="space-y-6">
+            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+              Book Appointment
+            </h3>
+            <div>
+              <Label htmlFor="appointment-date" value="Date of Appointment" />
+              <TextInput
+                type="date"
+                id="appointment-date"
+                value={appointmentDate}
+                onChange={(e) => setAppointmentDate(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="appointment-time" value="Time of Appointment" />
+              <TextInput
+                type="time"
+                id="appointment-time"
+                value={appointmentTime}
+                onChange={(e) => setAppointmentTime(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <Label
+                htmlFor="appointment-purpose"
+                value="Purpose of Appointment"
+              />
+              <TextInput
+                id="appointment-purpose"
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                required
+              />
+            </div>
+            <div className="w-full">
+              <Button
+                onClick={() => handleBookAppointment(doctorId)}
+                disabled={loading}
+              >
+                {loading ? "Booking..." : "Book Appointment"}
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      {successfulMessage && <SuccessMessage />}
+    </>
+  );
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+import React from "react";
+import { Alert, Button, Typography } from "@material-tailwind/react";
+
+function Icon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        fillRule="evenodd"
+        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+export function SuccessMessage() {
+  const [open, setOpen] = React.useState(true);
+
+  return (
+    <>
+      <Alert
+        open={open}
+        color="green"
+        className="max-w-screen-md"
+        icon={<Icon />}
+        onClose={() => setOpen(false)}
+      >
+        <Typography variant="h5" color="white">
+          Success
+        </Typography>
+        <Typography color="white" className="mt-2 font-normal">
+          I don&apos;t know what that word means. I&apos;m happy. But success,
+          that goes back to what in somebody&apos;s eyes success means. For me,
+          success is inner peace. That&apos;s a good day for me.
+        </Typography>
+      </Alert>
+    </>
+  );
+}
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+import { Modal } from "flowbite-react";
+import React, { useState } from "react";
+
+export default function SuccessMessage() {
+  const [openModal, setOpenModal] = useState(false);
+  return (
+    <>
+      <Modal
+        show={openModal}
+        size="md"
+        popup
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="space-y-6">
+            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+              Book Appointment
+            </h3>
+            <div>some text here</div>
+            <div>//another text here</div>
+            <div>
+              htmlFor="appointment-purpose" value="Purpose of Appointment" //
+              Another
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
+
+
+<div className="mx-auto max-w-screen-xl p-2 lg:rounded lg:pl-6 my-16 border shadow-lg">
+      <div>
+        <div className="grid grid-cols-3 gap-10">
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Firstname
+            </Typography>
+            <Typography as="span">{userData.patientFirstname}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Lastname
+            </Typography>
+            <Typography as="span">{userData.patientLastname}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Date of Birth
+            </Typography>
+            <Typography as="span">{userData.dob}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Gender
+            </Typography>
+            <Typography as="span">{userData.gender}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Address
+            </Typography>
+            <Typography as="span">{userData.patientAddress}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Email
+            </Typography>
+            <Typography as="span">{userData.patientEmail}</Typography>
+          </div>
+          <div className="flex flex-col">
+            <Typography as="label" color="blue-gray" className="font-bold">
+              Phone Number
+            </Typography>
+            <Typography as="span">{userData.patientPhoneNumber}</Typography>
+          </div>
+        </div>
+        {/* <div className="flex gap-4 mt-4">
+          <Button color="blue" ripple="light" className="rounded-md">
+            Blood Group{" "}
+            <span className="text-red-500 ml-4 font-extrabold">
+              {userData.bloodGroup}
+            </span>
+          </Button>
+          <Button color="blue" ripple="light" className="rounded-md">
+            Genotype{" "}
+            <span className="text-red-500 ml-4 font-extrabold">
+              {userData.patientGenotype}
+            </span>
+          </Button>
+          <Button color="blue" ripple="light" className="rounded-md">
+            Current Medications
+          </Button>
+        </div> */}
+        <Charts />
+      </div>
+    </div>

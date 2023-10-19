@@ -1,0 +1,44 @@
+<div className=" mx-auto flex flex-row border h-16 ">
+            <img
+              className="w-10 h-11 flex rounded-full"
+              src={userData.profilePicture.imageUrl}
+              alt={userData.firstname}
+            />
+            {/* Render user data only when it's available */}
+            <div className="ml-4  ">
+              <Typography className="font-bold" as="span">
+                {userData.firstname}
+                <span className="ml-2">{userData.lastname}</span>
+                <span className="ml-2 font-thin">Patient</span>
+              </Typography>
+            </div>
+            {/* Render other user data properties similarly */}
+          </div>
+
+          <div className="flex flex-col justify-between border w-full h-11 mb-10 ">
+            <div className="fond-bold flex flex-row ">
+              <h4>Birth</h4>
+              <span className="font-thin">{userData.dob}</span>
+              <div>2</div>
+              <div>3</div>
+            </div>
+
+            <div className="flex flex-row justify-between items-center">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Blood Group
+              </button>
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Allergies
+              </button>
+              <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                Medications
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row justify-between border w-full h-11">
+            <div className="fond-bold ">
+              Birth <span className="font-thin">{userData.dob}</span>
+            </div>
+            <div>2</div>
+            <div>3</div>
+          </div>
