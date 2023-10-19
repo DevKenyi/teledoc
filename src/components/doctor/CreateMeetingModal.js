@@ -35,7 +35,7 @@ export function CreateMeetingModal({
 
   const handleOpen = () => {
     if (status !== "Scheduled") {
-      alert("You are not scheduled for an appointment.");
+      alert("Patient is yet not scheduled for an appointment");
     } else {
       setOpen(true);
     }
@@ -114,7 +114,8 @@ export function CreateMeetingModal({
           );
           console.log("Meeting id:", meetingId);
           setMeetingId(meetingId); // Set the meeting ID in the state
-          addParticipants(meetingId);
+          setMeetingStatus(true);
+          window.alert("meeting has been created");
         } else {
           console.log("Failed to extract the meeting ID from the response.");
         }
@@ -134,53 +135,6 @@ export function CreateMeetingModal({
     handleChildOnClick(patientId);
   };
 
-  const addParticipants = async (meetingId) => {
-    const participantPayload = {
-      name: "Mary Sue",
-      picture: "https://i.imgur.com/test.jpg",
-      preset_name: "webinar_presenter",
-      custom_participant_id: "23",
-    };
-
-    try {
-      const addParticipantsResponse = await ApiService.addParticipants(
-        doctorsId,
-        meetingId,
-        participantPayload,
-        {
-          Authorization: `Bearer ${jwtToken}`,
-        }
-      );
-
-      console.log("Response from addParticipants:", addParticipantsResponse);
-
-      if (addParticipantsResponse.status === HttpStatusCode.Created) {
-        console.log(
-          "Participant added successfully:",
-          addParticipantsResponse.data
-        );
-
-        // Extract token using string manipulation
-        const responseText = addParticipantsResponse.data;
-        const tokenStartIndex = responseText.indexOf('"token":"') + 9;
-        const tokenEndIndex = responseText.indexOf('"', tokenStartIndex);
-        const token = responseText.substring(tokenStartIndex, tokenEndIndex);
-
-        setAuthToken(token);
-        setMeetingStatus(true);
-        console.log("Token for participant:", token);
-        console.log("set value of auth token " + authToken);
-      } else {
-        console.log(
-          "Failed to add participant. Response:",
-          addParticipantsResponse.data
-        );
-        // Handle the case where participant addition failed
-      }
-    } catch (error) {
-      console.log("Error adding participants:", error);
-    }
-  };
   useEffect(() => {
     console.log("Token has been updated:", authToken);
   }, [authToken]);

@@ -69,7 +69,7 @@ const Appointmets_Doctors = () => {
       return "Schedule";
     }
     if (appointmentStatus === "Scheduled") {
-      return "Go Live with patient!";
+      return "Create Meeting!";
     }
     if (appointmentStatus === " InProcess") {
       return "Completed";

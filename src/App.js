@@ -15,6 +15,7 @@ import DoctorPatients from "./components/doctor/DoctorPatients";
 import DoctorShedule from "./components/doctor/DoctorShedule";
 import DoctorsSettings from "./components/doctor/DoctorsSettings";
 import { TableMeeting } from "./components/TableMeeting";
+import MeedingVideoConferencing from "./components/meetin_ui/MeedingVideoConferencing";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
               </DocLayout>
             }
           />
+          <Route path="/video" element={<MeedingVideoConferencing />} />
           <Route
             path="/doctors-schedule"
             element={

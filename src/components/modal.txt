@@ -274,3 +274,59 @@ export default function SuccessMessage() {
         <Charts />
       </div>
     </div>
+
+
+
+    ...............
+
+    const addParticipant = async (e) => {
+    e.preventDefault();
+
+    const addParticipants = async (meetingId) => {
+      const participantPayload = {
+        name: "Mary Sue",
+        picture: "https://i.imgur.com/test.jpg",
+        preset_name: "webinar_presenter",
+        custom_participant_id: "23",
+      };
+
+      try {
+        const addParticipantsResponse = await ApiService.addParticipants(
+          doctorsId,
+          meetingId,
+          participantPayload,
+          {
+            Authorization: `Bearer ${jwtToken}`,
+          }
+        );
+
+        console.log("Response from addParticipants:", addParticipantsResponse);
+
+        if (addParticipantsResponse.status === HttpStatusCode.Created) {
+          console.log(
+            "Participant added successfully:",
+            addParticipantsResponse.data
+          );
+
+          // Extract token using string manipulation
+          const responseText = addParticipantsResponse.data;
+          const tokenStartIndex = responseText.indexOf('"token":"') + 9;
+          const tokenEndIndex = responseText.indexOf('"', tokenStartIndex);
+          const token = responseText.substring(tokenStartIndex, tokenEndIndex);
+
+          setAuthToken(token);
+          setMeetingStatus(true);
+          console.log("Token for participant:", token);
+          console.log("set value of auth token " + authToken);
+        } else {
+          console.log(
+            "Failed to add participant. Response:",
+            addParticipantsResponse.data
+          );
+          // Handle the case where participant addition failed
+        }
+      } catch (error) {
+        console.log("Error adding participants:", error);
+      }
+    };
+  };

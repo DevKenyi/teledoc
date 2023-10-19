@@ -16,10 +16,11 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
+import { JoinMeetingModal } from "./JoinMeetingModal";
 
 const TABLE_HEAD = ["Meeting id", "Title", "Created at", "Status"];
 
-export function TableMeeting() {
+export function TableMeeting({ handleButtonToggle }) {
   const fetchMeetingResponse = async (jwtToken) => {
     try {
       const response = await ApiService.fetchMeetingDetails({
@@ -38,6 +39,7 @@ export function TableMeeting() {
   };
   const jwtToken = localStorage.getItem("jwtToken");
   const [tableData, setTabledata] = useState([]);
+  const [showMeetingModal, setShowMeetingModal] = useState(false);
 
   useEffect(() => {
     if (jwtToken) {
@@ -45,20 +47,21 @@ export function TableMeeting() {
     }
   }, [jwtToken]);
 
-  const handleOnclick = () => {
-    console.log("meeting title created");
+  // Function to toggle the Join Meeting Modal
+  const toggleMeetingModal = () => {
+    setShowMeetingModal(!showMeetingModal);
   };
 
   return (
     <>
       <div className="">
-        <div className="font-bold m-4 text-4xl   text-black">
-          Meeting <span className="text-r ed-600">Details</span>
+        <div className="font-bold m-4 text-4xl text-black">
+          Meeting <span className="text-red-600">Details</span>
         </div>
         <div className="flex lg:flex-row sm:flex-col md: flex-grow  cursor-pointer border w-full ">
           <Card className="h-full w-full p-32">
             <CardHeader floated={false} shadow={false} className="rounded-none">
-              <div className="mb-2 flex items-center justify-between gap-4">
+              <div className="mb-2 flex items-center justify between gap-4">
                 <div>
                   <Typography variant="h5" color="blue-gray">
                     Your Meeting list
@@ -125,6 +128,15 @@ export function TableMeeting() {
                         className="font-normal leading-none opacity-70"
                       >
                         Join
+                      </Typography>
+                    </th>
+                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        Action
                       </Typography>
                     </th>
                   </tr>
@@ -224,9 +236,34 @@ export function TableMeeting() {
                               >
                                 <button
                                   className="bg-blue-600 w-32 h-8 text-white font-bold"
-                                  onClick={() => handleOnclick()}
+                                  onClick={toggleMeetingModal}
                                 >
                                   Join now
+                                </button>
+                              </Typography>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {null}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                <button
+                                  className="bg-red-600 w-32 h-8 text-white font-bold"
+                                  // onClick={toggleMeetingModal}
+                                >
+                                  Delete Meeting
                                 </button>
                               </Typography>
                               <Typography
@@ -246,6 +283,9 @@ export function TableMeeting() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4"></CardFooter>
           </Card>
+          {showMeetingModal && (
+            <JoinMeetingModal toggleMeetingModal={toggleMeetingModal} />
+          )}
         </div>
       </div>
     </>
