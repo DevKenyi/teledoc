@@ -18,34 +18,42 @@ import {
 } from "@material-tailwind/react";
 import { JoinMeetingModal } from "./JoinMeetingModal";
 
-const TABLE_HEAD = ["Meeting id", "Title", "Created at", "Status"];
-
 export function TableMeeting({ handleButtonToggle }) {
-  const fetchMeetingResponse = async (jwtToken) => {
-    try {
-      const response = await ApiService.fetchMeetingDetails({
-        Authorization: `Bearer ${jwtToken}`,
-      });
+  const TABLE_HEAD = ["Meeting id", "Title", "Created at", "Status"];
 
-      if (response.status === 200) {
-        console.log(response.data);
-        setTabledata(response.data);
-      } else {
-        console.log("Couldn't get data from the server");
-      }
-    } catch (error) {
-      console.error("Error processing request", error);
-    }
-  };
   const jwtToken = localStorage.getItem("jwtToken");
+  const doctorsId = localStorage.getItem("doctorId");
+
+  console.log("jwt token here " + jwtToken);
+  console.log("docots id here " + doctorsId);
   const [tableData, setTabledata] = useState([]);
   const [showMeetingModal, setShowMeetingModal] = useState(false);
 
   useEffect(() => {
-    if (jwtToken) {
-      fetchMeetingResponse(jwtToken);
+    meetingResponseData();
+  }, [doctorsId, jwtToken]);
+
+  const meetingResponseData = async () => {
+    try {
+      const response = await ApiService.meetingByDoctorsId(doctorsId, {
+        Authorization: `Bearer ${jwtToken}`,
+      });
+
+      if (response.status === 200) {
+        const responseData = response.data;
+        setTabledata(responseData);
+      } else if (response.status === 302) {
+        console.log("Token expired!");
+        // You may want to handle token expiration, e.g., by redirecting the user to the login page.
+      } else {
+        console.log("Unexpected response status: " + response.status);
+        // You can display an error message to the user here.
+      }
+    } catch (error) {
+      console.log("Error getting data", error);
+      // Handle errors or display an error message to the user.
     }
-  }, [jwtToken]);
+  };
 
   // Function to toggle the Join Meeting Modal
   const toggleMeetingModal = () => {

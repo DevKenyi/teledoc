@@ -84,7 +84,6 @@ export function SideNavBarDoctor() {
     <Card className="h-[calc(100vh-2rem)] w-full md:w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-1 p-2 w-full border shadow-sm ">
         <div className="flex items-center justify-center">
-        
           <img
             src={completeImageUrl ? completeImageUrl : "image loading"}
             alt={doctorProfile?.firstname}
@@ -119,7 +118,7 @@ export function SideNavBarDoctor() {
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/doctor-patients">Patient List</Link>
+          <Link to="/meeting-details">Patient List</Link>
           <ListItemSuffix>
             <Chip
               value="14"
@@ -135,6 +134,22 @@ export function SideNavBarDoctor() {
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           <Link to="/doctors-schedule">Schedule</Link>
+          <ListItemSuffix>
+            <Chip
+              value="14"
+              size="sm"
+              variant="ghost"
+              color="red"
+              className="rounded-full"
+            />
+          </ListItemSuffix>
+        </ListItem>
+
+        <ListItem>
+          <ListItemPrefix>
+            <InboxIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          <Link to="/e-Precription">ePrescription</Link>
           <ListItemSuffix>
             <Chip
               value="14"

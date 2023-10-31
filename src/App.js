@@ -1,4 +1,3 @@
-import { AuthProvider } from "./components/AuthProvider";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
@@ -16,6 +15,7 @@ import DoctorShedule from "./components/doctor/DoctorShedule";
 import DoctorsSettings from "./components/doctor/DoctorsSettings";
 import { TableMeeting } from "./components/TableMeeting";
 import MeedingVideoConferencing from "./components/meetin_ui/MeedingVideoConferencing";
+import EPrecription from "./components/doctor/EPrecription";
 
 function App() {
   return (
@@ -64,12 +64,30 @@ function App() {
               </DocLayout>
             }
           />
+
           <Route path="/video" element={<MeedingVideoConferencing />} />
           <Route
             path="/doctors-schedule"
             element={
               <DocLayout>
                 <DoctorShedule />
+              </DocLayout>
+            }
+          />
+          <Route
+            path="/meeting-details"
+            element={
+              <DocLayout>
+                <TableMeeting />
+              </DocLayout>
+            }
+          />
+
+          <Route
+            path="/e-Precription"
+            element={
+              <DocLayout>
+                <EPrecription />
               </DocLayout>
             }
           />
@@ -81,14 +99,7 @@ function App() {
               </DocLayout>
             }
           />
-          <Route
-            path="//meeting-details"
-            element={
-              <DocLayout>
-                <TableMeeting />
-              </DocLayout>
-            }
-          />
+
           <Route
             path="/appointments"
             element={

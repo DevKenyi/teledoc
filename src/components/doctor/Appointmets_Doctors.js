@@ -40,15 +40,6 @@ const Appointmets_Doctors = () => {
 
         setPatientList(responseData);
 
-        // Assuming responseData is an array of appointments
-        // const patientIds = responseData.map(
-        //   (appointment) => appointment.patient.patientId
-        // );
-
-        // setPatientId(patientIds);
-
-        // console.log("Patient IDs: ", patientIds);
-
         console.log(
           "All doctor appointments for debugging here " +
             JSON.stringify(responseData)
@@ -77,6 +68,9 @@ const Appointmets_Doctors = () => {
     if (appointmentStatus === "Reschedule") {
       return "Reschedule";
     }
+    if (appointmentStatus === "Completed") {
+      return "No further action required";
+    }
   };
 
   const handlePatientIdClick = (patientId, patientJwt) => {
@@ -88,6 +82,7 @@ const Appointmets_Doctors = () => {
 
   return (
     <>
+      {" "}
       <div className="m-8 p-8  w-full ">
         <div className="font-bold m-4 text-4xl   text-black">
           Doctors <span className="text-r ed-600">Appoinments</span>

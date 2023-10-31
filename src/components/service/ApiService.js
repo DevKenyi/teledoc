@@ -122,6 +122,18 @@ class ApiService {
     console.log(`Url for fetching fetching meeting details ${url}`);
     return axios.get(url, { headers });
   }
+
+  static meetingByDoctorsId(doctorsId, headers) {
+    const url = `${baseUrl}/api/meeting/dyte-response/${doctorsId}`;
+    console.log(`url for meeting based on doctors id ${url}`);
+    return axios.get(url, { headers });
+  }
+
+  static updateMeeting(appointmentId, headers) {
+    const url = `${baseUrl}/api/v1/updateStatus/${appointmentId}`;
+    console.log(`url for updating the status of an appointment url ${url}`);
+    return axios.put(url, { headers });
+  }
 }
 
 export default ApiService;

@@ -13,6 +13,7 @@ import { CustomSpinner } from "../SpinnerComponent";
 import { DyteErrorMessage } from "../DyteErrorMessage";
 import MeedingVideoConferencing from "../meetin_ui/MeedingVideoConferencing";
 import { useNavigate } from "react-router-dom";
+import { ScheduleModal } from "./SheduleModal";
 
 export function CreateMeetingModal({
   btnText,
@@ -32,12 +33,25 @@ export function CreateMeetingModal({
   const [meetingId, setMeetingId] = useState("");
   const [authToken, setAuthToken] = useState("");
   const [meetingStatus, setMeetingStatus] = useState(false);
+  const [scheduleMeeting, setScheduleMeeting] = useState(false);
+  const [statusComplete, setStatusComplete] = useState(false);
 
   const handleOpen = () => {
-    if (status !== "Scheduled") {
-      alert("Patient is yet not scheduled for an appointment");
-    } else {
+    // if (status !== "Scheduled") {
+    //   // alert("Patient is yet not scheduled for an appointment");
+    //   setScheduleMeeting(true);
+    // } else {
+    //   setOpen(true);
+    // }
+
+    if (status === "Scheduled") {
       setOpen(true);
+    }
+    if (status === "Completed") {
+      setStatusComplete(true);
+    }
+    if (status === "Pending") {
+      setScheduleMeeting(true);
     }
   };
 
@@ -200,6 +214,8 @@ export function CreateMeetingModal({
           </Button>
         </DialogFooter>
       </Dialog>
+      {scheduleMeeting && <ScheduleModal handleOpen={handleOpen} />}
+      {statusComplete && window.alert("No further needed!")}
     </>
   );
 }
